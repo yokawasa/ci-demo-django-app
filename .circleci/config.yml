@@ -4,8 +4,6 @@ jobs:
     docker:
       - image: node:8.1.2
     working_directory: ~/circleci-working
-    environment:
-      TAG: $CIRCLE_SHA1
 
     steps:
       # checkout sourcecode on to working_directory
@@ -34,22 +32,22 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            #TAG=$CIRCLE_SHA1
+            TAG=$CIRCLE_SHA1
             docker build -t yoichikawasaki/angular4-app:$TAG angular4-app
 
       - run:
           name: Start container and check if it's running
           command: |
             # make sure you're not using `--rm` option otherwise container will be killed after finish
-            #TAG=$CIRCLE_SHA1
+            TAG=$CIRCLE_SHA1
             docker run -d --name angular4-app yoichikawasaki/angular4-app:$TAG 
-            docker exec angular4-app curl --retry 10 --retry-delay 3  http://localhost:4200
+            docker exec angular4-app curl --retry 10 --retry-delay 3 http://localhost:4200
       
       - run:
           name: Push Docker image
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              #TAG="${CIRCLE_SHA1}"
+              TAG=$CIRCLE_SHA1
               docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
               docker push yoichikawasaki/angular4-app:$TAG
             fi
