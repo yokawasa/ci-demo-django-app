@@ -10,7 +10,7 @@ jobs:
       - checkout
 
       # Before setup_remote_docker, all commands are executed in the primary container.
-      # - run: mkdir -p <dir>
+      # - run: ...
 
       # Once setup_remote_docker is called, a new remote environment is created,
       # and your primary container is configured to use it. This is a way to solve 
@@ -42,14 +42,14 @@ jobs:
             TAG=$CIRCLE_SHA1
             docker run -d -p 4200:4200 --name angular4-app yoichikawasaki/angular4-app:$TAG 
             sleep 10 && docker exec angular4-app curl --retry 10 --retry-delay 3 http://localhost:4200
-            #sleep 5 && nc -vz localhost 4200
-            #docker exec angular4-app curl --retry 10 --retry-delay 3 http://localhost:4200
       
       - run:
-          name: Push Docker image
+          name: Push Docker image and Update Azure Web App with the image
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               TAG=$CIRCLE_SHA1
               docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
               docker push yoichikawasaki/angular4-app:$TAG
+              az login --service-principal -u $AZURE_USER -p $AZURE_PASSWORD --tenant $AZURE_TENANT
+              az webapp config container set --name $AZURE_APP_NAME --resource-group $AZURE_RESOURCE_GROUP -c "yoichikawasaki/angular4-app:$TAG"
             fi
