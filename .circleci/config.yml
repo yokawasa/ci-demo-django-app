@@ -41,7 +41,8 @@ jobs:
             # make sure you're not using `--rm` option otherwise container will be killed after finish
             TAG=$CIRCLE_SHA1
             docker run -d -p 4200:4200 --name angular4-app yoichikawasaki/angular4-app:$TAG 
-            docker exec angular4-app curl --retry 10 --retry-delay 3 http://localhost:4200
+            sleep 5 && nc -vz localhost 4200
+            #docker exec angular4-app curl --retry 10 --retry-delay 3 http://localhost:4200
       
       - run:
           name: Push Docker image
