@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            pip install azure-cli
+            sudo pip install azure-cli
 
       # All docker-related commands are also executed in your primary container, 
       # but building/pushing images and running containers happens in the remote Docker Engine
