@@ -16,7 +16,7 @@ RUN apt-get update && \
 	nginx \
 	supervisor \
 	sqlite3 \
-	openssh-server vim && \
+	openssh-server vim curl && \
 	pip3 install -U pip setuptools && \
     rm -rf /var/lib/apt/lists/*
 
