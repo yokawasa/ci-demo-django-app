@@ -29,15 +29,15 @@ jobs:
           name: Build Docker image
           command: |
             TAG=$CIRCLE_SHA1
-            docker build -t yoichikawasaki/django-app:$TAG django-app
+            docker build -t yoichikawasaki/angular4-app:$TAG angular4-app
 
       - run:
           name: Start container and check if it's running
           command: |
             # make sure you're not using `--rm` option otherwise container will be killed after finish
             TAG=$CIRCLE_SHA1
-            docker run -d -p 8080:8080 --name django-app yoichikawasaki/django-app:$TAG 
-            sleep 10 && docker exec django-app curl --retry 10 --retry-delay 3 http://localhost:8080
+            docker run -d -p 4200:4200 --name angular4-app yoichikawasaki/angular4-app:$TAG 
+            sleep 10 && docker exec angular4-app curl --retry 10 --retry-delay 3 http://localhost:4200
       
       - run:
           name: Push Docker image and Update Azure Web App with the image
@@ -45,7 +45,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               TAG=$CIRCLE_SHA1
               docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-              docker push yoichikawasaki/django-app:$TAG
+              docker push yoichikawasaki/angular4-app:$TAG
               az login --service-principal -u $AZURE_USER -p $AZURE_PASSWORD --tenant $AZURE_TENANT
-              az webapp config container set --name $AZURE_APP_NAME --resource-group $AZURE_RESOURCE_GROUP -c "yoichikawasaki/django-app:$TAG"
+              az webapp config container set --name $AZURE_APP_NAME --resource-group $AZURE_RESOURCE_GROUP -c "yoichikawasaki/angular4-app:$TAG"
             fi
