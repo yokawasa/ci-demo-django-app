@@ -14,10 +14,8 @@ myAzurePass="<service principal password>"
 myAzureTenant="<service principal tenant name>"
 
 myResourceGroup="RG-yoichika-demo"
-#myAppName="yoichikaangulardemo01"
-#myDockerCustomImage="yoichikawasaki/app-services-nodejs:angular4-app-0.0.2"
-myAppName="yoichikadjangodemo01"
-myDockerCustomImage="yoichikawasaki/app-services-python:django-app-0.0.5"
+myAppName="djangoappdemo01"
+myDockerCustomImage="yoichikawasaki/django-app:0.0.1"
 
 az login --service-principal -u $myAzureUser -p $myAzurePass --tenant $myAzureTenant
 az webapp config container set --name $myAppName --resource-group $myResourceGroup -c "$myDockerCustomImage"

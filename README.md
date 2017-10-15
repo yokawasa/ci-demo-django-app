@@ -1,1 +1,1 @@
-# azure-web-apps-linux-ci-demo
+# ci-demo-django-app
